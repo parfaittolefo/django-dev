@@ -25,7 +25,6 @@ def currente_time_with_offset(request,offset):
 
 
 # Define view using templates
-
 def currente_time(request):
     now_time=datetime.datetime.now()
     tpl=get_template('currente_time.html')

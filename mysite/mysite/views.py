@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.template import Context
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 import datetime
 
@@ -31,4 +33,10 @@ def currente_time(request):
     html = tpl.render({'now_time':now_time})
     
     return HttpResponse(html)
+
+def redirect_to_year(request):
+
+    year = 2012
+
+    return HttpResponseRedirect(reverse('offset_timer', args=(year,)))
 

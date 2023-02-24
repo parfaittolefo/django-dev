@@ -4,6 +4,6 @@
 
 {% block content %}
 
-<p> is current date time: {{now_time}} .</p>
-
+<p> is current date time: {{now_time}} .</p> <br><br>
+<h2>Look the time with offset here: <a href="{% url 'offset_timer' 2 %}"> Time offset 2</a></h2>
 {% endblock %}

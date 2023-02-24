@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+<title>Add new Publisher </title>
+</head>
+<body>
+<h1>Add a new Publisher </h1>
+{% if form.errors %}
+    <p style="color: red;">
+    Please correct the error{{ form.errors|pluralize }} below.
+    </p>
+    {% endif %}
+<form action="." method="POST">
+<table>
+    {% csrf_token %}
+    {{ form.as_table }}
+</table>
+<p><input type="submit" value="Send"></p>
+</form>
+</body>
+</html>

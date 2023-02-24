@@ -14,10 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.conf.urls import url
 from mysite.views import *
+from django.urls import include, re_path, path
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    url(r'^time/$',currente_time),
-    url(r'^time_offset/plus/(\d{1,2})/*', currente_time_with_offset),
-]
+    re_path(r'^time/$',currente_time),
+    re_path(r'^time_offset/plus/(\d{1,2})/*', currente_time_with_offset,name='offset_timer'),
+    re_path('admin/', admin.site.urls),
+    path("",include('books.urls')) ,
+ 
+    ]

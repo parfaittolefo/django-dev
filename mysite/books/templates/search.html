@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+<title>Search{% if query %} Results{% endif %}</title>
+</head>
+<body>
+<h1>Search</h1>
+
+<form action="." method="GET">
+<label for="q">Search: </label>
+<input type="text" name="q" value="{{ query|escape }}">
+<input type="submit" value="Search">
+
+
+<p style="color: red;">
+    {% if error %}
+Please submit a search term 20 characters or shorter.
+{% endif %}
+</p>
+
+
+</form >
+{% if query %}
+<h2>Results for "{{ query|escape }}":</h2>
+
+{% if results %}
+<ul6>
+{% for book in results %}
+<li>{{ book|escape }}</li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No books found</p>
+{% endif %}
+{% endif %}
+</body>
+</html>

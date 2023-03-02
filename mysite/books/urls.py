@@ -17,5 +17,6 @@ urlpatterns = [
     #re_path(r'^search/$', TemplateView.as_view(template_name='search.html'), name="search"),
     #re_path(r'^publishers/$', PublisherList.as_view()),
     re_path(r'^publishers/$', PublisherList.as_view(),publisher_info),
+    re_path(r'^my_proc/$',views.my_proc_view),
 
 ]

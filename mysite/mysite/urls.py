@@ -17,11 +17,13 @@ from django.contrib import admin
 from mysite.views import *
 from django.urls import include, re_path, path
 from django.views.generic import TemplateView
+from django.contrib.sitemaps.views import sitemap
 
 urlpatterns = [
     re_path(r'^time/$',currente_time),
     re_path(r'^time_offset/plus/(\d{1,2})/*', currente_time_with_offset,name='offset_timer'),
     re_path('admin/', admin.site.urls),
     path("",include('books.urls')) ,
- 
+    re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+    name='django.contrib.sitemaps.views.sitemap')
     ]

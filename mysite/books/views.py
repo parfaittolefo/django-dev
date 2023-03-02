@@ -2,10 +2,13 @@ from django.shortcuts import render
 from django.db.models import Q
 from books.modelsapp import Book,Publisher
 from books.formsapp import ContactForm,PublisherForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from django.core.mail import send_mail
 from django.views.generic import ListView,DetailView
 from django.http import Http404
+from django.template import RequestContext
+import csv
+from reportlab.pdfgen import canvas
 
 # Create your views here.
 def search(request):
@@ -99,12 +102,87 @@ class BookList(ListView):
 
 
 def books_by_publisher(request, name):
-    # Look up the publisher (and raise a 404 if it can’t be found).
+    # Look up the publisher (and raise a 404 if it can't be found).
     try:
         publisher= Publisher.objects.get(name__iexact=name)
     except Publisher.DoesNotExist:
         raise Http404
      
 
+contexts={
+            'ap': 'My app',
+            'user': 'User name',
+            'ip_address':'User IP'
+        }
 
+def my_proc_view(request):
+    return render(request,'processors_template.html',contexts)
+
+#Serve image to broswer
+def my_image(request):
+    image_data= open("/tmp/chall_1.jpg", "rb").read()
+    return HttpResponse(image_data, content_type="image/png")
+
+
+def some_view(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment';
+    filename="somefilename.csv"
+
+    writer = csv.writer(response)
+    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"'])
+
+    return response
+
+#PDF Generating
+
+def some_view(request):
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment';
+    filename="somefilename.pdf"
+
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 100, "Hello world.")
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    return response
+        
     
+    # Complexe ODF more efficient
+
+from io import BytesIO
+from reportlab.pdfgen import canvas
+
+def some_view(request):
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment';
+    filename="somefilename.pdf"
+
+    buffer = BytesIO()
+
+    # Create the PDF object, using the BytesIO object as its "file."
+    p = canvas.Canvas(buffer)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 100, "Hello world.")
+
+    # Close the PDF object cleanly.
+    p.showPage()
+    p.save()
+
+    # Get the value of the BytesIO buffer and write it to the response.
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+    return response
